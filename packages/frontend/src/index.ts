@@ -6,15 +6,13 @@ import App from "./views/App.vue";
 
 import "./styles/index.css";
 
-import manifest from "../../../manifest.json" with { type: "json" };
-
 import { SDKPlugin } from "./plugins/sdk";
 import type { FrontendSDK } from "./types";
 
-
-
+debugger;
 // This is the entry point for the frontend plugin
 export const init = (sdk: FrontendSDK) => {
+  console.log("init");
   const app = createApp(App);
 
   // Load the PrimeVue component library
@@ -32,12 +30,6 @@ export const init = (sdk: FrontendSDK) => {
     height: "100%",
     width: "100%",
   });
-
-  // Set the ID of the root element
-  // We use the manifest ID to ensure that the ID is unique per-plugin
-  // This is necessary to prevent styling conflicts between plugins
-  // The value here should be the same as the prefixWrap plugin in postcss.config.js
-  root.id = `plugin--${manifest.id}`;
 
   // Mount the app to the root element
   app.mount(root);

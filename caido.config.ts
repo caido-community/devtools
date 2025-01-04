@@ -4,20 +4,55 @@ import tailwindcss from "tailwindcss";
 // @ts-expect-error no declared types at this time
 import tailwindPrimeui from "tailwindcss-primeui";
 import tailwindCaido from "@caido/tailwindcss";
+import path from "path";
 
 export default defineConfig({
+  id: "devtools",
+  name: "Devtools",
+  description: "Devtools plugin",
+  version: "1.0.0",
+  author: {
+    name: "Caido Labs Inc.",
+    email: "info@caido.com",
+    url: "https://caido.com",
+  },
   plugins: [
     {
+      kind: "backend",
+      id: "backend",
+      root: "packages/backend",
+    },
+    {
       kind: 'frontend',
+      id: "frontend",
       root: 'packages/frontend',
+      backend: {
+        id: "backend",
+      },
       vite: {
         plugins: [vue()],
+        build: {
+          rollupOptions: {
+            external: ['@caido/frontend-sdk']
+          }
+        },
+        resolve: {
+          alias: [
+            {
+              find: "@",
+              replacement: path.resolve(__dirname, "packages/frontend/src"),
+            },
+          ],
+        },
         css: {
           postcss: {
             plugins: [
               tailwindcss({
+                corePlugins: {
+                  preflight: false,
+                },
                 content: [
-                  './src/**/*.{vue,ts}',
+                  './packages/frontend/src/**/*.{vue,ts}',
                   './node_modules/@caido/primevue/dist/primevue.mjs'
                 ],
                 // Check the [data-mode="dark"] attribute on the <html> element to determine the mode
