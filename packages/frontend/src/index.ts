@@ -36,10 +36,10 @@ export const init = (sdk: FrontendSDK) => {
 
   // Add the page to the navigation
   // Make sure to use a unique name for the page
-  sdk.navigation.addPage("/my-plugin", {
+  sdk.navigation.addPage("/devtools", {
     body: root,
   });
 
   // Add a sidebar item
-  sdk.sidebar.registerItem("My Plugin", "/my-plugin");
+  sdk.sidebar.registerItem("Devtools", "/devtools");
 };
