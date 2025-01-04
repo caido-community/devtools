@@ -9,10 +9,8 @@ import "./styles/index.css";
 import { SDKPlugin } from "./plugins/sdk";
 import type { FrontendSDK } from "./types";
 
-debugger;
 // This is the entry point for the frontend plugin
 export const init = (sdk: FrontendSDK) => {
-  console.log("init");
   const app = createApp(App);
 
   // Load the PrimeVue component library
