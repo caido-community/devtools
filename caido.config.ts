@@ -10,7 +10,7 @@ export default defineConfig({
   id: "devtools",
   name: "Devtools",
   description: "Devtools plugin",
-  version: "1.0.0",
+  version: "0.0.1",
   author: {
     name: "Caido Labs Inc.",
     email: "info@caido.com",

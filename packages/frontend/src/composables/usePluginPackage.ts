@@ -1,47 +1,53 @@
 import { useSDK } from "@/plugins/sdk";
-import { ref } from "vue";
 
 export const usePluginPackage = () => {
     const sdk = useSDK();
 
-    const pluginPackageId = ref<string | undefined>(undefined);
+    const getInstalledPackage = async (packageId: string) => {
+        const { pluginPackages } = await sdk.graphql.pluginPackages();
+        return pluginPackages.find((pluginPackage) => pluginPackage.manifestId === packageId);
+    }
 
-    const reinstallPackage = async (options: {
+    const installPackage = async (options: {
         downloadUrl: string,
     }) => {
-        try {
-            console.log("Uninstalling package");
-            if (pluginPackageId.value) {
-                const { uninstallPluginPackage } = await sdk.graphql.uninstallPluginPackage({
-                    id: pluginPackageId.value,
-                })
 
-                if (uninstallPluginPackage.error) {
-                    sdk.window.showToast(JSON.stringify(uninstallPluginPackage.error), {
-                        variant: "error",
-                    });
+        const dataUri = await sdk.backend.downloadPackage(options.downloadUrl);
+        const response = await fetch(dataUri);
+        const blob = await response.blob();
+
+        const { installPluginPackage } = await sdk.graphql.installPluginPackage({
+            input: {
+                source: {
+                    file: new File([blob], "plugin_package.zip"),
+
                 }
-            }
+            },
+        })
 
-            const dataUri = await sdk.backend.downloadPackage(options.downloadUrl);
-            const response = await fetch(dataUri);
-            const blob = await response.blob();
+        if (installPluginPackage.package) {
+            return {
+                packageId: installPluginPackage.package.id,
+            };
+        }
 
-            const { installPluginPackage } = await sdk.graphql.installPluginPackage({
-                input: {
-                    source: {
-                        file: new File([blob], "plugin_package.zip"),
+        if (installPluginPackage.error) {
+            sdk.window.showToast(JSON.stringify(installPluginPackage.error), {
+                variant: "error",
+            });
+        }
+    }
 
-                    }
-                },
+    const removePackage = async (options: {
+        packageId: string,
+    }) => {
+        try {
+            const { uninstallPluginPackage } = await sdk.graphql.uninstallPluginPackage({
+                id: options.packageId,
             })
 
-            if (installPluginPackage.package) {
-                pluginPackageId.value = installPluginPackage.package.id;
-            } 
-            
-            if (installPluginPackage.error) {
-                sdk.window.showToast(JSON.stringify(installPluginPackage.error), {
+            if (uninstallPluginPackage.error) {
+                sdk.window.showToast(JSON.stringify(uninstallPluginPackage.error), {
                     variant: "error",
                 });
             }
@@ -51,7 +57,7 @@ export const usePluginPackage = () => {
                     variant: "error",
                 });
             } else {
-                sdk.window.showToast("Failed to reinstall package", {
+                sdk.window.showToast("Failed to uninstall package", {
                     variant: "error",
                 });
             }
@@ -59,6 +65,8 @@ export const usePluginPackage = () => {
     }
 
     return {
-        reinstallPackage,
+        installPackage,
+        removePackage,
+        getInstalledPackage,
     }
 }

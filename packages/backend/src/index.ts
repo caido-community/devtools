@@ -2,15 +2,22 @@ import type { DefineAPI, SDK } from "caido:plugin";
 import { fetch } from "caido:http";
 import { Buffer } from "buffer";
 
-let serverUrl: string | null = null;
+type Settings = {
+  serverUrl: string | undefined;
+  packageId: string | undefined;
+} ;
 
-const setServerUrl = (sdk: SDK, url: string) => {
-  serverUrl = url;
-  sdk.console.log(`Connected to: ${url}`);
+const settings: Settings = {
+  serverUrl: undefined,
+  packageId: undefined,
 };
 
-const getServerUrl = (sdk: SDK) => {
-  return serverUrl;
+const setSettings = (sdk: SDK, newSettings: Settings) => {
+  Object.assign(settings, newSettings);
+};
+
+const getSettings = (sdk: SDK): Settings => {
+  return settings;
 };
 
 const downloadPackage = async (sdk: SDK, url: string) => {
@@ -21,13 +28,13 @@ const downloadPackage = async (sdk: SDK, url: string) => {
 };
 
 export type API = DefineAPI<{
-  setServerUrl: typeof setServerUrl;
-  getServerUrl: typeof getServerUrl;
+  setSettings: typeof setSettings;
+  getSettings: typeof getSettings;
   downloadPackage: typeof downloadPackage;
 }>;
 
 export function init(sdk: SDK<API>) {
-  sdk.api.register("setServerUrl", setServerUrl);
-  sdk.api.register("getServerUrl", getServerUrl);
+  sdk.api.register("setSettings", setSettings);
+  sdk.api.register("getSettings", getSettings);
   sdk.api.register("downloadPackage", downloadPackage);
 }

@@ -1,77 +1,115 @@
 import { useLogs } from "@/composables/useLogs";
 import { usePluginPackage } from "@/composables/usePluginPackage";
-import { useSDK } from "@/plugins/sdk";
+import { useSettings } from "@/composables/useSettings";
+import { useState } from "@/composables/useState";
 import { toMessage } from "@/utils/watcher";
 import { onMounted, ref } from "vue";
 
-type State =
-    | { kind: "Idle" }
-    | { kind: "Connecting"; url: string }
-    | { kind: "Connected"; ws: WebSocket };
-
 export const useForm = () => {
-
     const { logs, addLog } = useLogs();
-    const { reinstallPackage } = usePluginPackage();
+    const { state, setState } = useState();
+    const { getSettings, setSettings, initializeSettings } = useSettings();
+    const { installPackage, removePackage, getInstalledPackage } = usePluginPackage();
 
-    const state = ref<State>({ kind: "Idle" });
-    const setState = (newState: State) => {
-        switch (newState.kind) {
-            case "Idle":
+    const onConnected = async (packageId: string, downloadUrl: string) => {
+        const settings = getSettings();
+        const installedPackage = await getInstalledPackage(packageId);
+        if (installedPackage) {
+            addLog("Devtools", `Package ${packageId} is already installed`);
+            await setSettings({
+                ...settings,
+                packageId: installedPackage.id,
+            });
+            return;
+        } else {
+            addLog("Devtools", `Installing ${packageId}`);
+            const installResult = await installPackage({ downloadUrl });
+            if (installResult) {
+                await setSettings({
+                    ...settings,
+                    packageId: installResult.packageId,
+                });
+                window.location.reload();
+            }
+        }
+    }
+
+    const onRebuild = async (downloadUrl: string) => {
+        const settings = getSettings();
+        if (settings.packageId) {
+            addLog("Devtools", `Uninstalling ${settings.packageId}`);
+            await removePackage({ packageId: settings.packageId });
+            await setSettings({
+                ...settings,
+                packageId: undefined,
+            });
+        }
+
+        addLog("Devtools", `Installing new package`);
+        const installResult = await installPackage({ downloadUrl });
+        if (installResult) {
+            await setSettings({
+                ...settings,
+                packageId: installResult.packageId,
+            });
+            window.location.reload();
+        }
+
+    }
+
+    const onMessage = async (event: MessageEvent) => {
+        addLog("WatchServer", event.data);
+        const message = toMessage(event);
+        if (!message) return ;
+
+        switch (message.kind) {
+            case "connected":
+                onConnected(message.packageId, message.downloadUrl);
                 break;
-            case "Connecting":
-                addLog(`Connecting to ${newState.url}`);
+            case "rebuild": 
+                onRebuild(message.downloadUrl);
                 break;
-            case "Connected":
-                addLog(`Connected to ${newState.ws.url}`);
+            case "error":
+                addLog("WatchServer", message.error);
                 break;
         }
-        state.value = newState;
-    };
+    }
 
     const connect = async (url: string) => {
-        setState({ kind: "Connecting", url });
-        const ws = new WebSocket(url);
-        ws.addEventListener("message", (event) => {
-            addLog(event.data);
-
-            const message = toMessage(event);
-            if (message) {
-                switch (message.kind) {
-                    case "connected":
-                        reinstallPackage(message);
-                        break;
-                    case "rebuild":
-                        reinstallPackage(message);
-                        break;
-                    case "error":
-                        addLog(message.error);
-                        break;
-                }
-            }
+        const settings = getSettings();
+        setSettings({
+            ...settings,
+            serverUrl: url,
         });
 
+        addLog("Devtools", `Connecting to ${url}`);
+        setState({ kind: "Connecting", url });
+
+        const ws = new WebSocket(url);
+        ws.addEventListener("message", onMessage);
         ws.addEventListener("open", () => {
+            addLog("Devtools", `Connected to ${url}`);
             setState({ kind: "Connected", ws });
-            sdk.backend.setServerUrl(url);
         });
 
         ws.addEventListener("error", (event) => {
-            addLog(`Error: ${JSON.stringify(event)}`);
+            addLog("Devtools", `Error: ${JSON.stringify(event)}`);
         });
 
         ws.addEventListener("close", () => {
+            addLog("Devtools", `Disconnected from ${url}`);
             setState({ kind: "Idle" });
         });
     };
 
-    const sdk = useSDK();
     const serverUrl = ref("");
     onMounted(async () => {
-        const url = await sdk.backend.getServerUrl();
-        if (url) {
-            serverUrl.value = url;
-            await connect(url);
+        await initializeSettings();
+
+        const settings = getSettings();
+        if (settings.serverUrl) {
+            serverUrl.value = settings.serverUrl;
+            await connect(settings.serverUrl);
         }
     });
 
@@ -82,7 +120,6 @@ export const useForm = () => {
     const onDisconnect = () => {
         if (state.value.kind === "Connected") {
             state.value.ws.close();
-            setState({ kind: "Idle" });
         }
     };
 

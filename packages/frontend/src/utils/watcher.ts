@@ -1,6 +1,7 @@
 type ConnectedMessage = {
     kind: "connected";
     downloadUrl: string;
+    packageId: string;
 }
 
 type RebuildMessage = {
@@ -26,7 +27,7 @@ const isConnectedMessage = (data: unknown): data is ConnectedMessage => {
         return false;
     }
 
-    return "kind" in data && data.kind === "connected" && "downloadUrl" in data;
+    return "kind" in data && data.kind === "connected" && "downloadUrl" in data && "packageId" in data;
 }
 
 const isErrorMessage = (data: unknown): data is ErrorMessage => {

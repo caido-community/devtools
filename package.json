@@ -15,7 +15,7 @@
     "watch": "caido-dev watch"
   },
   "devDependencies": {
-    "@caido-community/dev": "0.0.3",
+    "@caido-community/dev": "0.0.4",
     "@caido/tailwindcss": "0.0.1",
     "@types/node": "22.10.5",
     "@vitejs/plugin-vue": "5.2.1",
