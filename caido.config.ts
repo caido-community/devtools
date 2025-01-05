@@ -9,12 +9,12 @@ import path from "path";
 export default defineConfig({
   id: "devtools",
   name: "Devtools",
-  description: "Devtools plugin",
+  description: "Hot-reloading for faster Caido plugin development",
   version: "0.0.1",
   author: {
     name: "Caido Labs Inc.",
-    email: "info@caido.com",
-    url: "https://caido.com",
+    email: "dev@caido.io",
+    url: "https://caido.io",
   },
   plugins: [
     {

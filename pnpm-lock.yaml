@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@caido-community/dev':
-        specifier: 0.0.3
-        version: 0.0.3(tsup@8.3.5(jiti@2.4.2)(postcss@8.4.49)(typescript@5.5.4)(yaml@2.7.0))(vite@6.0.7(@types/node@22.10.5)(jiti@2.4.2)(yaml@2.7.0))
+        specifier: 0.0.4
+        version: 0.0.4(tsup@8.3.5(jiti@2.4.2)(postcss@8.4.49)(typescript@5.5.4)(yaml@2.7.0))(vite@6.0.7(@types/node@22.10.5)(jiti@2.4.2)(yaml@2.7.0))
       '@caido/tailwindcss':
         specifier: 0.0.1
         version: 0.0.1
@@ -96,8 +96,8 @@ packages:
     resolution: {integrity: sha512-vN5p+1kl59GVKMvTHt55NzzmYVxprfJD+ql7U9NFIfKCBkYE55LYtS+WtPlaYOyzydrKI8Nezd+aZextrd+FMA==}
     engines: {node: '>=6.9.0'}
 
-  '@caido-community/dev@0.0.3':
-    resolution: {integrity: sha512-pg9lfG8Ll5O8sFGT1bfBJ16mkFPUHpYViGtJ3z7jSdwyOjmSZQU9uAOhS9aXkqTLegLQkQ2WOFjJ8lNhQNYv/A==}
+  '@caido-community/dev@0.0.4':
+    resolution: {integrity: sha512-tdd3xbRp31BWijekqM3T0YOyd5aJLKd9uU1bR+25oW3S4YPr/2h/FmICkGHffKDx1tTqZK4dUKhOvUtPL2BOJA==}
     hasBin: true
     peerDependencies:
       tsup: ^8.0.0
@@ -1556,7 +1556,7 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@caido-community/dev@0.0.3(tsup@8.3.5(jiti@2.4.2)(postcss@8.4.49)(typescript@5.5.4)(yaml@2.7.0))(vite@6.0.7(@types/node@22.10.5)(jiti@2.4.2)(yaml@2.7.0))':
+  '@caido-community/dev@0.0.4(tsup@8.3.5(jiti@2.4.2)(postcss@8.4.49)(typescript@5.5.4)(yaml@2.7.0))(vite@6.0.7(@types/node@22.10.5)(jiti@2.4.2)(yaml@2.7.0))':
     dependencies:
       '@caido/plugin-manifest': 0.2.1
       chalk: 5.4.1
