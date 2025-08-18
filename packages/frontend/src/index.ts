@@ -2,12 +2,10 @@ import { Classic } from "@caido/primevue";
 import PrimeVue from "primevue/config";
 import { createApp } from "vue";
 
-import App from "./views/App.vue";
-
-import "./styles/index.css";
-
 import { SDKPlugin } from "./plugins/sdk";
+import "./styles/index.css";
 import type { FrontendSDK } from "./types";
+import App from "./views/App.vue";
 
 // This is the entry point for the frontend plugin
 export const init = (sdk: FrontendSDK) => {

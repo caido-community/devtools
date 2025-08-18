@@ -1,11 +1,12 @@
-import type { DefineAPI, SDK } from "caido:plugin";
-import { fetch } from "caido:http";
 import { Buffer } from "buffer";
+
+import { fetch } from "caido:http";
+import type { DefineAPI, SDK } from "caido:plugin";
 
 type Settings = {
   serverUrl: string | undefined;
   packageId: string | undefined;
-} ;
+};
 
 const settings: Settings = {
   serverUrl: undefined,
