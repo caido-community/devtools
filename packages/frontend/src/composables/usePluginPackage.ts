@@ -20,6 +20,7 @@ export const usePluginPackage = () => {
         source: {
           file: new File([blob], "plugin_package.zip"),
         },
+        force: true,
       },
     });
 

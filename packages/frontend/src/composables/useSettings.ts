@@ -5,6 +5,7 @@ import { useSDK } from "@/plugins/sdk";
 type Settings = {
   serverUrl: string | undefined;
   packageId: string | undefined;
+  forceUninstall: boolean;
 };
 
 export const useSettings = () => {
@@ -13,6 +14,7 @@ export const useSettings = () => {
   const settings = ref<Settings>({
     serverUrl: undefined,
     packageId: undefined,
+    forceUninstall: false,
   });
 
   const initializeSettings = async () => {

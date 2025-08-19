@@ -8,8 +8,10 @@ import Tag from "primevue/tag";
 import TextArea from "primevue/textarea";
 
 import { useForm } from "./useForm";
+import Checkbox from "primevue/checkbox";
 
-const { serverUrl, onSubmit, state, onDisconnect, logs } = useForm();
+const { serverUrl, forceUninstall, onSubmit, state, onDisconnect, logs } =
+  useForm();
 </script>
 
 <template>
@@ -65,6 +67,12 @@ const { serverUrl, onSubmit, state, onDisconnect, logs } = useForm();
                 />
               </InputGroupAddon>
             </InputGroup>
+            <div class="flex gap-2 items-center">
+              <Checkbox v-model="forceUninstall" binary />
+              <label class="text-nowrap"
+                >Force uninstall between rebuilds</label
+              >
+            </div>
           </div>
           <div class="flex-1 flex flex-col gap-2">
             <label for="logs" class="text-sm text-surface-300">Logs</label>

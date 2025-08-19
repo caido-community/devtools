@@ -38,7 +38,7 @@ export const useForm = () => {
 
   const onRebuild = async (downloadUrl: string) => {
     const settings = getSettings();
-    if (settings.packageId !== undefined) {
+    if (settings.packageId !== undefined && settings.forceUninstall) {
       addLog("Devtools", `Uninstalling ${settings.packageId}`);
       await removePackage({ packageId: settings.packageId });
       await setSettings({
@@ -114,6 +114,15 @@ export const useForm = () => {
     }
   });
 
+  const forceUninstall = ref({
+    get: () => getSettings().forceUninstall,
+    set: async (value: boolean) =>
+      await setSettings({
+        ...getSettings(),
+        forceUninstall: value,
+      }),
+  });
+
   const onSubmit = async () => {
     await connect(serverUrl.value);
   };
@@ -126,6 +135,7 @@ export const useForm = () => {
 
   return {
     serverUrl,
+    forceUninstall,
     state,
     onSubmit,
     onDisconnect,

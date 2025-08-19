@@ -6,11 +6,13 @@ import type { DefineAPI, SDK } from "caido:plugin";
 type Settings = {
   serverUrl: string | undefined;
   packageId: string | undefined;
+  forceUninstall: boolean;
 };
 
 const settings: Settings = {
   serverUrl: undefined,
   packageId: undefined,
+  forceUninstall: false,
 };
 
 const setSettings = (sdk: SDK, newSettings: Settings) => {
