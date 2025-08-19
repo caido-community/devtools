@@ -1,25 +1,44 @@
 import { computed, ref } from "vue";
 
+import { useSDK } from "@/plugins/sdk";
+
 type Log = {
   kind: "Log";
   origin: string;
-  timestamp: Date;
+  timestamp: number;
   message: string;
 };
 
 export const useLogs = () => {
+  const sdk = useSDK();
+
   const entries = ref<Log[]>([]);
   const logs = computed(() =>
     entries.value
       .map(
         (log) =>
-          `${log.timestamp.toISOString()} | ${log.origin} | ${log.message}`,
+          `${new Date(log.timestamp).toISOString()} | ${log.origin} | ${
+            log.message
+          }`,
       )
       .join("\n"),
   );
-  const addLog = (origin: string, message: string) => {
-    entries.value.push({ kind: "Log", origin, timestamp: new Date(), message });
+
+  const initializeLogs = async () => {
+    const logs = await sdk.backend.getLogs();
+    entries.value = logs;
   };
 
-  return { logs, addLog };
+  const addLog = (origin: string, message: string) => {
+    const log: Log = { kind: "Log", origin, timestamp: Date.now(), message };
+    entries.value.push(log);
+    sdk.backend.addLog(log);
+  };
+
+  const clearLogs = async () => {
+    entries.value = [];
+    await sdk.backend.clearLogs();
+  };
+
+  return { logs, addLog, clearLogs, initializeLogs };
 };

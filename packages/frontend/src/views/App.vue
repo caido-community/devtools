@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Button from "primevue/button";
 import Card from "primevue/card";
+import Checkbox from "primevue/checkbox";
 import InputGroup from "primevue/inputgroup";
 import InputGroupAddon from "primevue/inputgroupaddon";
 import InputText from "primevue/inputtext";
@@ -8,10 +9,16 @@ import Tag from "primevue/tag";
 import TextArea from "primevue/textarea";
 
 import { useForm } from "./useForm";
-import Checkbox from "primevue/checkbox";
 
-const { serverUrl, forceUninstall, onSubmit, state, onDisconnect, logs } =
-  useForm();
+const {
+  serverUrl,
+  forceUninstall,
+  onSubmit,
+  state,
+  onDisconnect,
+  logs,
+  onClearLogs,
+} = useForm();
 </script>
 
 <template>
@@ -75,7 +82,10 @@ const { serverUrl, forceUninstall, onSubmit, state, onDisconnect, logs } =
             </div>
           </div>
           <div class="flex-1 flex flex-col gap-2">
-            <label for="logs" class="text-sm text-surface-300">Logs</label>
+            <div class="flex items-end justify-between">
+              <label for="logs" class="text-sm text-surface-300">Logs</label>
+              <Button severity="danger" label="Clear" @click="onClearLogs" />
+            </div>
             <TextArea
               id="logs"
               readonly

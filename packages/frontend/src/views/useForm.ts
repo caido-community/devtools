@@ -7,7 +7,7 @@ import { useState } from "@/composables/useState";
 import { toMessage } from "@/utils/watcher";
 
 export const useForm = () => {
-  const { logs, addLog } = useLogs();
+  const { logs, addLog, initializeLogs, clearLogs } = useLogs();
   const { state, setState } = useState();
   const { getSettings, setSettings, initializeSettings } = useSettings();
   const { installPackage, removePackage, getInstalledPackage } =
@@ -106,6 +106,7 @@ export const useForm = () => {
   const serverUrl = ref("");
   onMounted(async () => {
     await initializeSettings();
+    await initializeLogs();
 
     const settings = getSettings();
     if (settings.serverUrl !== undefined) {
@@ -133,12 +134,17 @@ export const useForm = () => {
     }
   };
 
+  const onClearLogs = async () => {
+    await clearLogs();
+  };
+
   return {
     serverUrl,
     forceUninstall,
     state,
     onSubmit,
     onDisconnect,
+    onClearLogs,
     logs,
   };
 };
