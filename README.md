@@ -10,13 +10,13 @@ This is a companion plugin designed for developing Caido plugins. It should be u
 
 1. Execute the command `pnpm watch` to start a watch server. Example output:
    ```
-    > csp-auditor@1.0.0 watch /Users/ads/git/csp-auditor
+    > my-plugin@1.0.0 watch /Users/user/git/my-plugin
     > caido-dev watch
 
-    [*] Loading configuration: /Users/ads/git/csp-auditor/caido.config.ts
+    [*] Loading configuration: /Users/user/git/my-plugin/caido.config.ts
     [*] Building plugin package
-    [*] Loading configuration: /Users/ads/git/csp-auditor/caido.config.ts
-    [*] Building backend plugin: /Users/ads/git/csp-auditor/packages/backend
+    [*] Loading configuration: /Users/user/git/my-plugin/caido.config.ts
+    [*] Building backend plugin: /Users/user/git/my-plugin/packages/backend
     CLI Building entry: packages/backend/src/index.ts
     CLI Using tsconfig: tsconfig.json
     CLI tsup v8.3.5
@@ -26,7 +26,7 @@ This is a companion plugin designed for developing Caido plugins. It should be u
     ESM packages/backend/dist/index.js 27.34 KB
     ESM ⚡️ Build success in 126ms
     [*] Backend built successfully
-    [*] Building frontend plugin: /Users/ads/git/csp-auditor/packages/frontend
+    [*] Building frontend plugin: /Users/user/git/my-plugin/packages/frontend
     vite v6.0.7 building for production...
     ✓ 95 modules transformed.
     dist/index.css    9.68 kB │ gzip:   2.10 kB
