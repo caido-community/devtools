@@ -8,7 +8,7 @@ import type { FrontendSDK } from "./types";
 import App from "./views/App.vue";
 
 // This is the entry point for the frontend plugin
-export const init = (sdk: FrontendSDK) => {
+export const init = async (sdk: FrontendSDK) => {
   const app = createApp(App);
 
   // Load the PrimeVue component library
@@ -38,4 +38,18 @@ export const init = (sdk: FrontendSDK) => {
 
   // Add a sidebar item
   sdk.sidebar.registerItem("Devtools", "/devtools");
+
+  // Restore the last visited path
+  const settings = await sdk.backend.getSettings();
+  if (settings.restoreNavigation) {
+    const savedPath = localStorage.getItem("devtools_navigation_restore");
+    if (savedPath !== null) {
+      localStorage.removeItem("devtools_navigation_restore");
+      // We need to wait for all the plugins to be initialized
+      // Ideally we should have a SDK event for this but I don't think it's worth the effort
+      setTimeout(() => {
+        sdk.navigation.goTo(savedPath);
+      }, 200);
+    }
+  }
 };

@@ -7,12 +7,14 @@ type Settings = {
   serverUrl: string | undefined;
   packageId: string | undefined;
   forceUninstall: boolean;
+  restoreNavigation: boolean;
 };
 
 const settings: Settings = {
   serverUrl: undefined,
   packageId: undefined,
   forceUninstall: false,
+  restoreNavigation: true,
 };
 
 type Log = {
