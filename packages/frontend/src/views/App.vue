@@ -13,6 +13,7 @@ import { useForm } from "./useForm";
 const {
   serverUrl,
   forceUninstall,
+  restoreNavigation,
   onSubmit,
   state,
   onDisconnect,
@@ -78,6 +79,12 @@ const {
               <Checkbox v-model="forceUninstall" binary />
               <label class="text-nowrap"
                 >Force uninstall between rebuilds</label
+              >
+            </div>
+            <div class="flex gap-2 items-center">
+              <Checkbox v-model="restoreNavigation" binary />
+              <label class="text-nowrap"
+                >Restore navigation after rebuild</label
               >
             </div>
           </div>

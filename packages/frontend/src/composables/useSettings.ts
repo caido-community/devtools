@@ -6,6 +6,7 @@ type Settings = {
   serverUrl: string | undefined;
   packageId: string | undefined;
   forceUninstall: boolean;
+  restoreNavigation: boolean;
 };
 
 export const useSettings = () => {
@@ -15,6 +16,7 @@ export const useSettings = () => {
     serverUrl: undefined,
     packageId: undefined,
     forceUninstall: false,
+    restoreNavigation: true,
   });
 
   const initializeSettings = async () => {

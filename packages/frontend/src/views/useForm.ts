@@ -1,4 +1,4 @@
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 import { useLogs } from "@/composables/useLogs";
 import { usePluginPackage } from "@/composables/usePluginPackage";
@@ -31,6 +31,14 @@ export const useForm = () => {
           ...settings,
           packageId: installResult.packageId,
         });
+
+        if (settings.restoreNavigation) {
+          const currentPath = location.hash.substring(1);
+          if (currentPath) {
+            localStorage.setItem("devtools_navigation_restore", currentPath);
+          }
+        }
+
         window.location.reload();
       }
     }
@@ -54,6 +62,14 @@ export const useForm = () => {
         ...settings,
         packageId: installResult.packageId,
       });
+
+      if (settings.restoreNavigation) {
+        const currentPath = location.hash.substring(1);
+        if (currentPath) {
+          localStorage.setItem("devtools_navigation_restore", currentPath);
+        }
+      }
+
       window.location.reload();
     }
   };
@@ -115,12 +131,21 @@ export const useForm = () => {
     }
   });
 
-  const forceUninstall = ref({
+  const forceUninstall = computed({
     get: () => getSettings().forceUninstall,
     set: async (value: boolean) =>
       await setSettings({
         ...getSettings(),
         forceUninstall: value,
+      }),
+  });
+
+  const restoreNavigation = computed({
+    get: () => getSettings().restoreNavigation,
+    set: async (value: boolean) =>
+      await setSettings({
+        ...getSettings(),
+        restoreNavigation: value,
       }),
   });
 
@@ -141,6 +166,7 @@ export const useForm = () => {
   return {
     serverUrl,
     forceUninstall,
+    restoreNavigation,
     state,
     onSubmit,
     onDisconnect,
