@@ -6,12 +6,29 @@ import { useSettings } from "@/composables/useSettings";
 import { useState } from "@/composables/useState";
 import { toMessage } from "@/utils/watcher";
 
+const getDownloadUrl = (
+  originalUrl: string,
+  serverUrl: string | undefined,
+): string => {
+  if (!serverUrl) return originalUrl;
+
+  try {
+    const original = new URL(originalUrl);
+    const server = new URL(serverUrl);
+    return originalUrl.replace(original.origin, server.origin);
+  } catch {
+    return originalUrl;
+  }
+};
+
 export const useForm = () => {
   const { logs, addLog, initializeLogs, clearLogs } = useLogs();
   const { state, setState } = useState();
   const { getSettings, setSettings, initializeSettings } = useSettings();
   const { installPackage, removePackage, getInstalledPackage } =
     usePluginPackage();
+
+  const serverUrl = ref("http://localhost:3000");
 
   const onConnected = async (packageId: string, downloadUrl: string) => {
     const settings = getSettings();
@@ -24,8 +41,9 @@ export const useForm = () => {
       });
       return;
     } else {
-      addLog("Devtools", `Installing ${packageId}`);
-      const installResult = await installPackage({ downloadUrl });
+      const effectiveUrl = getDownloadUrl(downloadUrl, serverUrl.value);
+      addLog("Devtools", `Installing ${packageId} from ${effectiveUrl}`);
+      const installResult = await installPackage({ downloadUrl: effectiveUrl });
       if (installResult) {
         await setSettings({
           ...settings,
@@ -55,8 +73,9 @@ export const useForm = () => {
       });
     }
 
-    addLog("Devtools", `Installing new package`);
-    const installResult = await installPackage({ downloadUrl });
+    const effectiveUrl = getDownloadUrl(downloadUrl, serverUrl.value);
+    addLog("Devtools", `Installing new package from ${effectiveUrl}`);
+    const installResult = await installPackage({ downloadUrl: effectiveUrl });
     if (installResult) {
       await setSettings({
         ...settings,
@@ -75,17 +94,25 @@ export const useForm = () => {
   };
 
   const onMessage = async (event: MessageEvent) => {
-    addLog("WatchServer", event.data);
     const message = toMessage(event);
-    if (!message) return;
+    if (!message) {
+      addLog("WatchServer", event.data);
+      return;
+    }
 
     switch (message.kind) {
-      case "connected":
+      case "connected": {
+        const effectiveUrl = getDownloadUrl(message.downloadUrl, serverUrl.value);
+        addLog("WatchServer", JSON.stringify({ ...message, downloadUrl: effectiveUrl }));
         await onConnected(message.packageId, message.downloadUrl);
         break;
-      case "rebuild":
+      }
+      case "rebuild": {
+        const effectiveUrl = getDownloadUrl(message.downloadUrl, serverUrl.value);
+        addLog("WatchServer", JSON.stringify({ ...message, downloadUrl: effectiveUrl }));
         await onRebuild(message.downloadUrl);
         break;
+      }
       case "error":
         addLog("WatchServer", message.error);
         break;
@@ -119,7 +146,6 @@ export const useForm = () => {
     });
   };
 
-  const serverUrl = ref("");
   onMounted(async () => {
     await initializeSettings();
     await initializeLogs();
