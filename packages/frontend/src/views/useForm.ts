@@ -61,7 +61,6 @@ export const useForm = () => {
       }
     }
   };
-
   const onRebuild = async (downloadUrl: string) => {
     const settings = getSettings();
     if (settings.packageId !== undefined && settings.forceUninstall) {
