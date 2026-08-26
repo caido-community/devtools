@@ -14,6 +14,7 @@
   "devDependencies": {
     "@caido/sdk-backend": "0.50.2",
     "@caido/sdk-frontend": "0.50.2",
+    "@caido/sdk-frontend-58": "npm:@caido/sdk-frontend@0.57.2-beta.2",
     "@codemirror/view": "6.28.1",
     "backend": "workspace:*",
     "vue-tsc": "2.0.29"

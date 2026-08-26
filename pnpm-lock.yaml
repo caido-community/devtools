@@ -66,6 +66,9 @@ importers:
       '@caido/sdk-frontend':
         specifier: 0.50.2
         version: 0.50.2(@codemirror/state@6.5.0)(@codemirror/view@6.28.1)(vue@3.4.37(typescript@5.5.4))
+      '@caido/sdk-frontend-58':
+        specifier: npm:@caido/sdk-frontend@0.57.2-beta.2
+        version: '@caido/sdk-frontend@0.57.2-beta.2(@ai-sdk/provider@3.0.14)(@codemirror/state@6.5.0)(@codemirror/view@6.28.1)(vue@3.4.37(typescript@5.5.4))'
       '@codemirror/view':
         specifier: 6.28.1
         version: 6.28.1
@@ -77,6 +80,10 @@ importers:
         version: 2.0.29(typescript@5.5.4)
 
 packages:
+
+  '@ai-sdk/provider@3.0.14':
+    resolution: {integrity: sha512-5X1k57JBJ4H7H1QjX7CnJYAB1I19r/trVZTMcSms7/kLNZ8RaU4Nt2agcwZzv82Hfx6Q7/TOLU7agAKeFfc8cA==}
+    engines: {node: '>=18'}
 
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -125,6 +132,14 @@ packages:
   '@caido/sdk-frontend@0.50.2':
     resolution: {integrity: sha512-ERNtas4INAY4Kpau3D3UmaKu3xSJGbLGInQTk4K7CNShexbg8irnTZ0w6q+PPWjoYsp2N1uq0nUqnEQft3LSTg==}
     peerDependencies:
+      '@codemirror/state': ^6.0.0
+      '@codemirror/view': ^6.0.0
+      vue: ^3.0.0
+
+  '@caido/sdk-frontend@0.57.2-beta.2':
+    resolution: {integrity: sha512-S6iX0PeT/31c+ODIBC/i3tHi4urSAPCoS0f2LYNsFUZrHWC6FvY+oc7bptzQcGm9q+QfsJ2Ptjp9Owic+/fGaQ==}
+    peerDependencies:
+      '@ai-sdk/provider': ^3.0.1
       '@codemirror/state': ^6.0.0
       '@codemirror/view': ^6.0.0
       vue: ^3.0.0
@@ -1322,11 +1337,13 @@ packages:
 
   glob@10.4.5:
     resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@11.0.1:
     resolution: {integrity: sha512-zrQDm8XPnYEKawJScsnM0QzobJxlT/kHOOlRTio8IH/GrmxRE5fjllkzdaHclIuNjUQTJYH2xHNIGfdpJkDJUw==}
     engines: {node: 20 || >=22}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   globals@13.24.0:
@@ -1575,6 +1592,9 @@ packages:
 
   json-schema-traverse@1.0.0:
     resolution: {integrity: sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==}
+
+  json-schema@0.4.0:
+    resolution: {integrity: sha512-es94M3nTIfsEPisRafak+HDLfHXnKBhV3vU5eqPcS3flIWqcxJWgXHXiey3YrpaNsanY5ei1VoYEbOzijuq9BA==}
 
   json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
@@ -2114,6 +2134,7 @@ packages:
   source-map@0.8.0-beta.0:
     resolution: {integrity: sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==}
     engines: {node: '>= 8'}
+    deprecated: The work that was done in this beta branch won't be included in future versions
 
   statuses@2.0.1:
     resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
@@ -2477,6 +2498,10 @@ packages:
 
 snapshots:
 
+  '@ai-sdk/provider@3.0.14':
+    dependencies:
+      json-schema: 0.4.0
+
   '@alloc/quick-lru@5.2.0': {}
 
   '@babel/helper-string-parser@7.25.9': {}
@@ -2562,6 +2587,13 @@ snapshots:
 
   '@caido/sdk-frontend@0.50.2(@codemirror/state@6.5.0)(@codemirror/view@6.28.1)(vue@3.4.37(typescript@5.5.4))':
     dependencies:
+      '@codemirror/state': 6.5.0
+      '@codemirror/view': 6.28.1
+      vue: 3.4.37(typescript@5.5.4)
+
+  '@caido/sdk-frontend@0.57.2-beta.2(@ai-sdk/provider@3.0.14)(@codemirror/state@6.5.0)(@codemirror/view@6.28.1)(vue@3.4.37(typescript@5.5.4))':
+    dependencies:
+      '@ai-sdk/provider': 3.0.14
       '@codemirror/state': 6.5.0
       '@codemirror/view': 6.28.1
       vue: 3.4.37(typescript@5.5.4)
@@ -4124,6 +4156,8 @@ snapshots:
   json-schema-traverse@0.4.1: {}
 
   json-schema-traverse@1.0.0: {}
+
+  json-schema@0.4.0: {}
 
   json-stable-stringify-without-jsonify@1.0.1: {}
 
