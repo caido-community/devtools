@@ -17,7 +17,7 @@
     "watch": "caido-dev watch"
   },
   "devDependencies": {
-    "@caido-community/dev": "0.1.6",
+    "@caido-community/dev": "0.1.7",
     "@caido/eslint-config": "0.6.0",
     "@caido/tailwindcss": "0.0.1",
     "@types/node": "22.10.5",
