@@ -10,7 +10,7 @@ export default defineConfig({
   id: "devtools",
   name: "Devtools",
   description: "Hot-reloading for faster Caido plugin development",
-  version: "0.1.0",
+  version: "0.1.1",
   author: {
     name: "Caido Labs Inc.",
     email: "dev@caido.io",
